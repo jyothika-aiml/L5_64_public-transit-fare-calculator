@@ -1,0 +1,71 @@
+﻿Run started:2026-10-22 05:43:18.426791+00:00
+
+Test results:
+>> Issue: [B406:blacklist] Using xml.sax to parse untrusted XML data is known to be vulnerable to XML attacks. Replace xml.sax with the equivalent defusedxml package, or make sure defusedxml.defuse_stdlib() is called.
+   Severity: Low   Confidence: High
+   CWE: CWE-20 (https://cwe.mitre.org/data/definitions/20.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_imports.html#b406-import-xml-sax
+   Location: .\fare_calculator.py:2:0
+1	import os
+2	import xml.sax
+3	import paramiko
+
+--------------------------------------------------
+>> Issue: [B303:blacklist] Use of insecure MD2, MD4, MD5, or SHA1 hash function.
+   Severity: Medium   Confidence: High
+   CWE: CWE-327 (https://cwe.mitre.org/data/definitions/327.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b303-md5
+   Location: .\fare_calculator.py:60:25
+59	def ticketChecksum(ticket_text):
+60	    digest = hashes.Hash(hashes.MD5())
+61	    digest.update(ticket_text.encode())
+
+--------------------------------------------------
+>> Issue: [B317:blacklist] Using xml.sax.parseString to parse untrusted XML data is known to be vulnerable to XML attacks. Replace xml.sax.parseString with its defusedxml equivalent function or make sure defusedxml.defuse_stdlib() is called
+   Severity: Medium   Confidence: High
+   CWE: CWE-20 (https://cwe.mitre.org/data/definitions/20.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b313-b320-xml-bad-sax
+   Location: .\fare_calculator.py:75:4
+74	    handler = StopHandler()
+75	    xml.sax.parseString(xml_text.encode(), handler)
+76	    return handler.stops
+
+--------------------------------------------------
+>> Issue: [B507:ssh_no_host_key_verification] Paramiko call with policy set to automatically trust the unknown host key.
+   Severity: High   Confidence: Medium
+   CWE: CWE-295 (https://cwe.mitre.org/data/definitions/295.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b507_ssh_no_host_key_verification.html
+   Location: .\fare_calculator.py:80:4
+79	    client = paramiko.SSHClient()
+80	    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+81	    client.connect(gate_host, username="depot")
+
+--------------------------------------------------
+>> Issue: [B601:paramiko_calls] Possible shell injection via Paramiko call, check inputs are properly sanitized.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b601_paramiko_calls.html
+   Location: .\fare_calculator.py:82:4
+81	    client.connect(gate_host, username="depot")
+82	    client.exec_command("install_fares " + fare_file)
+83	    client.close()
+
+--------------------------------------------------
+
+Code scanned:
+	Total lines of code: 82
+	Total lines skipped (#nosec): 0
+	Total potential issues skipped due to specifically being disabled (e.g., #nosec BXXX): 0
+
+Run metrics:
+	Total issues (by severity):
+		Undefined: 0
+		Low: 1
+		Medium: 3
+		High: 1
+	Total issues (by confidence):
+		Undefined: 0
+		Low: 0
+		Medium: 2
+		High: 3
+Files skipped (0):
